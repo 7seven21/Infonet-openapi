@@ -1,0 +1,82 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "InfoNet Web Intelligence API",
+    "version": "1.0.0",
+    "description": "Public endpoint for OpenAI to load InfoNet scraping instructions."
+  },
+  "paths": {
+    "/scrape": {
+      "post": {
+        "summary": "Scrape a public website up to 2 levels deep and return clean text",
+        "operationId": "scrapeWebsite",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "The root URL to begin scraping"
+                  },
+                  "depth": {
+                    "type": "integer",
+                    "description": "Number of levels deep to crawl (max 2)",
+                    "default": 1,
+                    "enum": [
+                      0,
+                      1,
+                      2
+                    ]
+                  }
+                },
+                "required": [
+                  "url"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Scraped text and clickable links",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "type": "string"
+                          },
+                          "links": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
